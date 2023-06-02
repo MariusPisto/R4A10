@@ -1,3 +1,8 @@
+import {TabsManager} from "./js/TabsManager.js";
+import {TemperatureManager} from "./js/TemperatureManager.js";
+
+const O_TAB_MANAGER = new TabsManager();
+
 const I_TIMEOUT = 2000;
 
 // Array of random temperature
@@ -26,22 +31,28 @@ O_ADVICE_COLD_ELEMENT.appendChild(document.createTextNode(S_COLD_TEXT));
 const O_TEMPERATURE_SECTION = document.getElementById("temperature-section");
 const O_TEMPERATURE_VALUE = document.getElementById("temperature-value");
 
-// Historic section
-const O_HISTORIC_SECTION = document.getElementById("temperature-historic");
+// HISTORY section
+const O_HISTORY_SECTION = document.getElementById("temperature-history");
+
+// Nav element
+const O_NAV_DATA = document.getElementById("nav-data");
+const O_NAV_HISTORY = document.getElementById("nav-history");
 
 /**
  * Add advice to the temperature section
  * @param O_paragraph
  */
 const addAdvice = (O_paragraph) => {
+    O_paragraph.setAttribute('role', 'alert');
     O_TEMPERATURE_SECTION.insertBefore(O_paragraph, O_TEMPERATURE_VALUE);
 }
 
-const addHistoricValue = (I_value) => {
-    const O_historicElement = document.createElement("p");
-    const S_historicText = document.createTextNode(`La température était de ${I_value}${S_TEMPERATURE_UNIT}`);
-    O_historicElement.appendChild(S_historicText);
-    O_HISTORIC_SECTION.insertBefore(O_historicElement, O_HISTORIC_SECTION.firstChild);
+const addHISTORYValue = (I_value) => {
+    const O_historyElement = document.createElement("p");
+    O_historyElement.setAttribute('role', 'alert');
+    const S_historyText = document.createTextNode(`La température était de ${I_value}${S_TEMPERATURE_UNIT}`);
+    O_historyElement.appendChild(S_historyText);
+    O_HISTORY_SECTION.insertBefore(O_historyElement, O_HISTORY_SECTION.firstChild);
 }
 
 /**
@@ -57,20 +68,21 @@ const removeAdvice = () => {
 }
 
 A_TAB.forEach((I_element, I_index) => {
-    setTimeout(() => {
+    setTimeout(async () => {
+        let temp = await TemperatureManager.getTemperature();
         removeAdvice();
-        O_TEMPERATURE_VALUE.innerHTML = `${I_element}${S_TEMPERATURE_UNIT}`;
-        if (I_element >= O_COLD_TEMPERATURE.min && I_element < O_COLD_TEMPERATURE.max) {
+        O_TEMPERATURE_VALUE.innerHTML = `${temp}${S_TEMPERATURE_UNIT}`;
+        if (temp >= O_COLD_TEMPERATURE.min && temp < O_COLD_TEMPERATURE.max) {
             addAdvice(O_ADVICE_COLD_ELEMENT);
             O_TEMPERATURE_VALUE.className = "cold-temperature";
-        } else if (I_element >= O_COOL_TEMPERATURE.min && I_element < O_COOL_TEMPERATURE.max) {
+        } else if (temp >= O_COOL_TEMPERATURE.min && temp < O_COOL_TEMPERATURE.max) {
             O_TEMPERATURE_VALUE.className = "cool-temperature";
-        } else if (I_element >= O_WARM_TEMPERATURE.min && I_element < O_WARM_TEMPERATURE.max) {
+        } else if (temp >= O_WARM_TEMPERATURE.min && temp < O_WARM_TEMPERATURE.max) {
             O_TEMPERATURE_VALUE.className = "warm-temperature";
-        } else if (I_element >= O_HOT_TEMPERATURE.min && I_element < O_HOT_TEMPERATURE.max) {
+        } else if (temp >= O_HOT_TEMPERATURE.min && temp < O_HOT_TEMPERATURE.max) {
             addAdvice(O_ADVICE_HOT_ELEMENT);
             O_TEMPERATURE_VALUE.className = "hot-temperature";
         }
-        addHistoricValue(I_element);
+        addHISTORYValue(temp);
     }, I_TIMEOUT * I_index);
 });

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <script type="module" src="scriptTD2.js" defer></script>
+    <link rel="stylesheet" href="styleTD2.css">
+    <title>TD1</title>
+</head>
+<body>
+<header>
+    <h1>Température</h1>
+</header>
+<article>
+    <nav>
+        <ul>
+            <li id="nav-data" class="selected">Donnée</li>
+            <li id="nav-history">Historique</li>
+        </ul>
+    </nav>
+    <section id="temperature-section" aria-selected="true" hidden="false">
+        <p id="temperature-value" aria-live="assertive"></p>
+    </section>
+    <section aria-live="polite" aria-selected="false" id="temperature-history-section" hidden="true">
+        <section id="temperature-history">
+        </section>
+    </section>
+</article>
+</body>
+</html>

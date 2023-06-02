@@ -5,7 +5,6 @@ body {
 }
 
 #temperature-section {
-    display: flex;
     flex-direction: column;
     align-items: center;
 }
@@ -26,9 +25,8 @@ body {
     box-shadow: 6px 8px 7px 2px rgba(0,0,0,0.4);
 }
 
-#temperature-historic {
-    overflow-y: scroll;
-    height: 25rem;
+#temperature-history {
+    width: 100%;
 }
 
 h1 {
@@ -57,4 +55,39 @@ h1 {
 .hot-temperature {
     border: 2px solid red;
     background-color: red;
+}
+
+nav {
+    border-bottom: 2px solid black;
+}
+ul {
+    display: flex;
+    justify-content: space-around;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+li {
+    background-color: grey;
+    width: 100%;
+    border-radius: 50px 50px 0 0;
+    text-align: center;
+    color: white;
+    transition: background-color ease-in-out 0.2s;
+    padding: 0.5rem;
+}
+li:hover{
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+    background-color: darkgray;
+}
+.selected {
+    background-color: black;
+}
+
+[aria-selected="true"] {
+    display: flex;
+}
+[aria-selected="false"] {
+    display: none;
 }

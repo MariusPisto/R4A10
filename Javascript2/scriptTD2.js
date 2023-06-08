@@ -1,7 +1,9 @@
 import {TabsManager} from "./js/TabsManager.js";
 import {TemperatureManager} from "./js/TemperatureManager.js";
+import {CurrentTemperatureManager} from "./js/CurrentTemperatureManager.js";
 
 const O_TAB_MANAGER = new TabsManager();
+const O_CURRENT_TEMPERATURE_MANAGER = new CurrentTemperatureManager();
 
 const I_TIMEOUT = 2000;
 
@@ -54,35 +56,3 @@ const addHISTORYValue = (I_value) => {
     O_historyElement.appendChild(S_historyText);
     O_HISTORY_SECTION.insertBefore(O_historyElement, O_HISTORY_SECTION.firstChild);
 }
-
-/**
- * Remove advice from the temperature section
- */
-const removeAdvice = () => {
-    if (O_TEMPERATURE_SECTION.contains(O_ADVICE_HOT_ELEMENT)) {
-        O_TEMPERATURE_SECTION.removeChild(O_ADVICE_HOT_ELEMENT);
-    }
-    else if (O_TEMPERATURE_SECTION.contains(O_ADVICE_COLD_ELEMENT)) {
-        O_TEMPERATURE_SECTION.removeChild(O_ADVICE_COLD_ELEMENT);
-    }
-}
-
-A_TAB.forEach((I_element, I_index) => {
-    setTimeout(async () => {
-        let temp = await TemperatureManager.getTemperature();
-        removeAdvice();
-        O_TEMPERATURE_VALUE.innerHTML = `${temp}${S_TEMPERATURE_UNIT}`;
-        if (temp >= O_COLD_TEMPERATURE.min && temp < O_COLD_TEMPERATURE.max) {
-            addAdvice(O_ADVICE_COLD_ELEMENT);
-            O_TEMPERATURE_VALUE.className = "cold-temperature";
-        } else if (temp >= O_COOL_TEMPERATURE.min && temp < O_COOL_TEMPERATURE.max) {
-            O_TEMPERATURE_VALUE.className = "cool-temperature";
-        } else if (temp >= O_WARM_TEMPERATURE.min && temp < O_WARM_TEMPERATURE.max) {
-            O_TEMPERATURE_VALUE.className = "warm-temperature";
-        } else if (temp >= O_HOT_TEMPERATURE.min && temp < O_HOT_TEMPERATURE.max) {
-            addAdvice(O_ADVICE_HOT_ELEMENT);
-            O_TEMPERATURE_VALUE.className = "hot-temperature";
-        }
-        addHISTORYValue(temp);
-    }, I_TIMEOUT * I_index);
-});

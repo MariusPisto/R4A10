@@ -1,3 +1,5 @@
+import {TemperatureEntity} from "./TemperatureEntity.js";
+
 export class TemperatureManager {
     static getTemperature() {
         return fetch('https://hothothot.dog/api/capteurs/exterieur',
@@ -10,7 +12,7 @@ export class TemperatureManager {
             .then(res => {
                     if (res.ok) {
                         return res.json().then(data => {
-                            return data?.capteurs?.[0]?.Valeur;
+                            return new TemperatureEntity(data?.capteurs?.[0]?.Valeur, data?.capteurs?.[0]?.Timestamp);
                         });
                     }
                 }
